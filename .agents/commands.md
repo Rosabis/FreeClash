@@ -143,7 +143,8 @@ emulator validation; Kotlin compilation cannot prove those system callbacks.
 
 ## Verify
 
-The tag-triggered release workflow runs these root-package checks in order:
+The tag-triggered workflow only builds and publishes the Windows portable zip;
+it runs no test jobs. Validate changes locally before tagging:
 
 ```bash
 flutter pub get
@@ -151,11 +152,4 @@ flutter analyze --no-fatal-infos
 flutter test --reporter expanded
 ```
 
-Run `flutter analyze` locally before committing when practical.
-
 The workflow runs only for `v*` tag pushes; pull requests do not trigger it.
-Root analysis excludes `plugins/**`, and root tests do not discover nested
-plugin packages, so CI also validates local Flutter packages, the setup build
-tool, the Go wrapper, and Rust components from their own package directories. A
-separate Windows runner compiles and tests the helper's `windows-service`
-feature before release builds can start.
