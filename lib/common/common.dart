@@ -29,6 +29,7 @@ export 'package.dart';
 export 'path.dart';
 export 'permission.dart';
 export 'picker.dart';
+export 'portable.dart';
 export 'preferences.dart';
 export 'print.dart';
 export 'protocol.dart';

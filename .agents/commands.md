@@ -8,14 +8,13 @@ Update submodules first. The ClashMeta Go core lives in `core/Clash.Meta/`.
 git submodule update --init --recursive
 ```
 
-Full package build, including Go core, Flutter, and packaging, runs through `setup.dart`:
+Full package build, including Go core, Flutter, and packaging, runs through `setup.dart`. Packaging is Windows-only and produces a portable zip in `dist/`:
 
 ```bash
-dart setup.dart macos
-dart setup.dart linux
 dart setup.dart windows
-dart setup.dart android
 ```
+
+On Windows the app is portable: `lib/common/portable.dart` redirects path_provider and SharedPreferences at startup so configuration and data live in the `config` folder beside the executable instead of AppData.
 
 Build only the Go core and skip Flutter packaging:
 

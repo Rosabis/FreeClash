@@ -5,15 +5,15 @@ import '../setup.dart' as setup;
 void main() {
   group('setup.dart', () {
     test('parses -v as verbose mode', () {
-      final results = setup.createSetupArgParser().parse(['android', '-v']);
+      final results = setup.createSetupArgParser().parse(['windows', '-v']);
 
       expect(results['verbose'], isTrue);
-      expect(results.rest, ['android']);
+      expect(results.rest, ['windows']);
     });
 
     test('accepts dev application environment', () {
       final results = setup.createSetupArgParser().parse([
-        'android',
+        'windows',
         '--env',
         'dev',
       ]);
@@ -26,25 +26,21 @@ void main() {
     });
 
     test('omits verbose from flutter build args by default', () {
-      final args = setup.createFlutterBuildArgs(
-        platform: 'android',
-        verbose: false,
-      );
+      final args = setup.createFlutterBuildArgs(verbose: false);
 
-      expect(args, ['dart-define-from-file=env.json', 'split-per-abi']);
+      expect(args, ['dart-define-from-file=env.json']);
     });
 
     test('adds verbose to flutter build args with -v', () {
-      final args = setup.createFlutterBuildArgs(
-        platform: 'android',
-        verbose: true,
-      );
+      final args = setup.createFlutterBuildArgs(verbose: true);
 
-      expect(args, [
-        'verbose',
-        'dart-define-from-file=env.json',
-        'split-per-abi',
-      ]);
+      expect(args, ['verbose', 'dart-define-from-file=env.json']);
+    });
+
+    test('defaults package targets to portable zip', () {
+      final results = setup.createSetupArgParser().parse([]);
+
+      expect(results['targets'], 'zip');
     });
   });
 }

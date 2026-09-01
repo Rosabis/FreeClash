@@ -12,6 +12,9 @@ import 'common/common.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  if (system.isWindows) {
+    setupPortableStorage();
+  }
   try {
     if (system.isDesktop) {
       await RustLib.init();
