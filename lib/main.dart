@@ -16,6 +16,9 @@ void main(List<String> args) {
   runZonedGuarded(
     () async {
       WidgetsFlutterBinding.ensureInitialized();
+      if (Platform.isWindows) {
+        setupPortableStorage();
+      }
       if (Platform.isLinux) {
         linkManager.seedInitialLink(args);
       }
