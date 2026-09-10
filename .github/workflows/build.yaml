@@ -6,6 +6,7 @@ on:
       - '**'
     tags:
       - 'v*'
+  pull_request:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -26,6 +27,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          fetch-tags: true
 
       - name: Test commit message hook
         run: bash tool/check_commit_msg_test.sh
@@ -231,10 +233,10 @@ jobs:
         run: cargo test --manifest-path services/helper/Cargo.toml --features windows-service
 
   build:
-    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
-    needs: [ dart, plugins, go, android, rust, windows-helper-test ]
+    if: github.event_name == 'pull_request' || (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v'))
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
         include:
           - platform: android
@@ -347,9 +349,10 @@ jobs:
           overwrite: true
 
   upload:
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
     permissions:
       contents: write
-    needs: [ build ]
+    needs: [ dart, plugins, go, android, rust, windows-helper-test, build ]
     runs-on: ubuntu-latest
     services:
       telegram-bot-api:
